@@ -1,4 +1,5 @@
 import { db } from '../../db/index'
+import { v4 as uuid } from 'uuid'
 
 export default defineEventHandler(async (e) => {
   const method = e.req.method
@@ -14,10 +15,11 @@ export default defineEventHandler(async (e) => {
     if (!body.item) throw new Error
 
     const newTodo = {
-      id: new Date(),
+      id: uuid(),
       item: body.item,
       completed: false
     }
     db.todos.push(newTodo)
+    return newTodo
   }
 })
