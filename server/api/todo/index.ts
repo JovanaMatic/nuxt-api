@@ -1,15 +1,23 @@
 import { db } from '../../db/index'
 
-export default defineEventHandler((e) => {
-  const method = e.node.req.method
+export default defineEventHandler(async (e) => {
+  const method = e.req.method
 
   if (method === "GET") {
-    console.log("GET")
-    console.log(db.todos)
-  }
-
-  if (method === "POST") {
-    console.log("POST")
     return db.todos
+  }
+  
+  if (method === "POST") {
+    const body = await readBody(e)
+    console.log({ body })
+
+    if (!body.item) throw new Error
+
+    const newTodo = {
+      id: new Date(),
+      item: body.item,
+      completed: false
+    }
+    db.todos.push(newTodo)
   }
 })
