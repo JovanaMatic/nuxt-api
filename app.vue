@@ -1,5 +1,7 @@
 <script setup>
-  const { data: todos } = useFetch('/api/todo')
+  const { data: todos, refresh } = useAsyncData('todos', () => {
+    return $fetch('/api/todo')
+  })
   const todoInput = ref()
 
   const addTodo = async () => {
@@ -7,18 +9,21 @@
       method: 'post',
       body: { item: todoInput.value }
     })
+    refresh()
   }
 
   const updateTodo = async (id) => {
     await $fetch(`/api/todo/${id}`, {
       method: 'put'
     })
+    refresh()
   }
 
   const deleteTodo = async (id) => {
     await $fetch(`/api/todo/${id}`, {
       method: 'delete'
     })
+    refresh()
   }
 </script>
 
