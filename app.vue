@@ -1,30 +1,12 @@
 <script setup>
-  const { data: todos, refresh } = useAsyncData('todos', () => {
-    return $fetch('/api/todo')
-  })
-  const todoInput = ref()
+const todoInput = ref()
+const { todos, addTodo, updateTodo, deleteTodo } = useTodos()
 
-  const addTodo = async () => {
-    await $fetch('/api/todo', {
-      method: 'post',
-      body: { item: todoInput.value }
-    })
-    refresh()
-  }
+const handleClick = () => {
+  addTodo(todoInput.value)
+  todoInput.value = ''
+}
 
-  const updateTodo = async (id) => {
-    await $fetch(`/api/todo/${id}`, {
-      method: 'put'
-    })
-    refresh()
-  }
-
-  const deleteTodo = async (id) => {
-    await $fetch(`/api/todo/${id}`, {
-      method: 'delete'
-    })
-    refresh()
-  }
 </script>
 
 <template>
@@ -33,7 +15,7 @@
       <h1>My Todos</h1>
       <div class="add-todo">
         <input placeholder="Add todo" v-model="todoInput"/>
-        <UButton @click="addTodo">Add</UButton>
+        <UButton @click="handleClick">Add</UButton>
       </div>
       <UCard @click="() => updateTodo(todo.id)" class="card" v-for="todo in todos" :key="todo.id">
         <h4 :class="todo.completed ? 'complete' : null">{{ todo.item }}</h4>
