@@ -8,7 +8,7 @@ export default defineEventHandler(async (e) => {
   if (method === "GET") {
     return db.todos
   }
-  
+
   if (method === "POST") {
     const body = await readBody(e)
 
@@ -16,7 +16,7 @@ export default defineEventHandler(async (e) => {
       const bodyNotFoundError = createError({
         statusCode: 400,
         statusMessage: 'Missing data in body',
-        data: {} 
+        data: {}
       })
       sendError(e, bodyNotFoundError)
     }

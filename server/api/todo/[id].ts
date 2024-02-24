@@ -3,7 +3,6 @@ import { createError, sendError } from 'h3'
 
 export default defineEventHandler((e) => {
   const method = e.req.method
-  console.log(e.context.params.id)
   const { id } = e.context.params
 
   if (method === "PUT") {
@@ -17,7 +16,6 @@ export default defineEventHandler((e) => {
         return false
       }
     })
-    console.log(todo)
      if (!todo) {
       const todoNotFoundError = createError({
         statusCode: 404,
